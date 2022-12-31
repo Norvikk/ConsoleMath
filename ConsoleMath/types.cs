@@ -8,11 +8,10 @@ public static class Types
         public string[] Calls;
     }
 
-    // Struct for equation entries. (e.g) one[Number] plus[Operator] one[Number] <--- creates a new struct and adds it
-    // Because MathApplication1.Number is occupied 
+ 
     public struct MathApplication
     {
-        public int? Number;
+        public double? Number;
         public string? Operator;
     }
 }
