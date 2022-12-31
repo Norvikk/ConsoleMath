@@ -29,7 +29,7 @@ Clone this repo with git into any IDE supporting C#
 ```bash
   git clone https://github.com/Norvikk/ConsoleMath
   or
-  Manually copy & paste main.cs and download the NuGet Package
+  Manually copy & paste the files and download the NuGet Package
 ```
 Build & Run locally 
 
