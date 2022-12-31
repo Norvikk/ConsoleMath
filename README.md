@@ -33,3 +33,8 @@ Clone this repo with git into any IDE supporting C#
   Manually copy & paste main.cs and download the NuGet Package
 ```
 Build & Run locally 
+
+## Requirements
+
+- .NET 6.0 Runtime
+- MathParser.org-mXparser (NuGet)

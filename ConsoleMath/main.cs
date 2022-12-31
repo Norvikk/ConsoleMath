@@ -1,6 +1,6 @@
-﻿using org.mariuszgromada.math.mxparser; // String parser NuGet-package
+﻿using org.mariuszgromada.math.mxparser; // MathParser.org-mXparser (from NuGet)
 
-namespace ArithmeticTextToMath;
+namespace ConsoleMath;
 
 public static class Arithmetic
 {
@@ -11,65 +11,59 @@ public static class Arithmetic
     private const string SubtractionTrigger = "take subtract minus remove without -";
     private const string DivisionTrigger = "divided division divide /";
     private const string MultiplicationTrigger = "times multiplicate * multiplication";
+    
+    // Following numbers will be recognised by the program
+    // Adding any extra entries such a space (" ") will break it 
+    private const string TextToIntTrigger = "zero one two three four five six seven eight nine ten" +
+                                            " eleven twelve thirteen fourteen fifteen sixteen seventeen" +
+                                            " eighteen nineteen twenty";
 
     // Array initialization with struct
-    private static ArithmeticsSource[]? _source;
-    private static MathApplication[]? _appList;
+    private static Types.ArithmeticsSource[]? _source;
+    private static Types.MathApplication[]? _appList;
 
     // How many equations there can be in a single entry.
     // One equation: 10 times four (or) What is 10 times four anyways?
     private const int MathApplicationCount = 15;
 
     // Returns a random int from the given parameters
-    private static int GetRandomInt(int low, int max) => Rdm.Next(low, max);
+
 
     // Struct for specifying what terms / words trigger the corresponding equation
-    private struct ArithmeticsSource
-    {
-        public string ConsoleMeaning;
-        public string[] Calls;
-    }
-
-    // Struct for equation entries. (e.g) one[Number] plus[Operator] one[Number] <--- creates a new struct and adds it
-    // Because MathApplication1.Number is occupied 
-    private struct MathApplication
-    {
-        public int? Number;
-        public string? Operator;
-    }
+    
 
     // Initializes the Arrays and assigns to each 
     // the data at the top of the file
     private static void AssignArithmeticsSource()
     {
-        _source = new ArithmeticsSource[4];
+        _source = new Types.ArithmeticsSource[4];
 
-        _source[0] = new ArithmeticsSource
+        _source[0] = new Types.ArithmeticsSource
         {
             ConsoleMeaning = "+",
             Calls = AdditionTrigger.Split(" ")
         };
-        _source[1] = new ArithmeticsSource
+        _source[1] = new Types.ArithmeticsSource
         {
             ConsoleMeaning = "-",
             Calls = SubtractionTrigger.Split(" ")
         };
-        _source[2] = new ArithmeticsSource
+        _source[2] = new Types.ArithmeticsSource
         {
             ConsoleMeaning = "/",
             Calls = DivisionTrigger.Split(" ")
         };
-        _source[3] = new ArithmeticsSource
+        _source[3] = new Types.ArithmeticsSource
         {
             ConsoleMeaning = "*",
             Calls = MultiplicationTrigger.Split(" ")
         };
 
-        _appList = new MathApplication[MathApplicationCount + 1];
+        _appList = new Types.MathApplication[MathApplicationCount + 1];
 
         for (var i = 0; i < MathApplicationCount; i++)
         {
-            _appList[i] = new MathApplication
+            _appList[i] = new Types.MathApplication
             {
                 Number = 0,
                 Operator = null
@@ -79,9 +73,9 @@ public static class Arithmetic
 
     public static void Main()
     {
-        Introduction(); // Introduces the creator of the program ONCE PER APP RUN
-        CommandPalette(); // Shows possible commands ONCE PER APP RUN
-        Instructions(); // Shows a partially hard coded sample input ONCE PER APP RUN
+        Responses.Introduction(); // Introduces the creator of the program ONCE PER APP RUN
+        Responses.CommandPalette(); // Shows possible commands ONCE PER APP RUN
+        Responses.Instructions(); // Shows a partially hard coded sample input ONCE PER APP RUN
         while (true)
         {
             AssignArithmeticsSource(); // Initializes arrays
@@ -90,11 +84,11 @@ public static class Arithmetic
             switch (listened?.ToLower()) // Command handling
             {
                 case "instructions":
-                    Instructions();
+                    Responses.Instructions();
                     break;
 
                 case "supported":
-                    Supported();
+                    Responses.Supported();
                     break;
 
                 case "": // Check if user input is null. If so, inform user and restart program 
@@ -103,13 +97,14 @@ public static class Arithmetic
                     break;
 
                 default: // If no commands are detected and the user gave input, try to process it
+                    // ReSharper disable once SpecifyACultureInStringConversionExplicitly
                     var userOutput = Convert.ToString(Listen(listened!));
-                    if (userOutput ==  "-2,1474836E+09")
+                    if (userOutput == "-2,1474836E+09")
                         userOutput =
                             $"({userOutput}: ERROR)\nHave you considered using the command: SUPPORTED as an input?";
-                    
+
                     // If the user input returns a ERROR by the NuGet package, inform the user and suggest to check the SUPPORTED command out
-                    Console.WriteLine($"The result is {userOutput}");
+                    Console.WriteLine($"{Responses.ResultAffirmation()}{userOutput}");
                     break;
             }
 
@@ -119,44 +114,6 @@ public static class Arithmetic
         }
     }
 
-    // Custom function for getting a fancy underline with characters used in this example
-    // Example Text
-    // ------------
-    private static string GetSplitterLines(string sentence, string spacerStyle)
-    {
-        var result = "";
-
-        for (var i = 0; i < sentence.Length / spacerStyle.Length; i++)
-        {
-            result += spacerStyle;
-        }
-
-        return result;
-    }
-
-    private static void CommandPalette()
-    {
-        Console.WriteLine("Possible commands ->  supported, instructions");
-    }
-
-    private static void Introduction()
-    {
-        const string output = "<Norvik>     ConsoleMath";
-        Console.WriteLine(output);
-        Console.WriteLine(GetSplitterLines(output, "-+"));
-    }
-
-    private static void Supported()
-    {
-        Console.WriteLine("Operators supported: +-*/\n" +
-                          "Not supported: The number '0' (e.g. 0 + 1).\nEquations should be written with spaces and not 1+1 or oneplusone.\nSymbols connected to words are also not supported like 'one plus one!!'\ndecimal numbers are not intended to be used therefore don't work\n\nThe text variant of any number above 20 (twenty) is not supported, but can be easily implemented in the code.");
-    }
-
-    private static void Instructions()
-    {
-        var result = $"Sample input: Get {GetRandomInt(-54, 11)} minus {GetRandomInt(1, 9)}";
-        Console.WriteLine($"{result}\n{GetSplitterLines(result, "-")}\n");
-    }
 
     // Main processing function
     private static float Listen(string listened)
@@ -212,10 +169,7 @@ public static class Arithmetic
         // Returns a int if string word is the text equivalent of any number up to 20 in this build (More can be added but I didn't bother)
         static int IsIndirectInt(string word)
         {
-            // Simplified way of adding numbers. DO NOT ADD USELESS ENTRIES SUCH AS AN EXTRA SPACE BECAUSE IT WILL BREAK THE PROGRAM INTO PROMPTING -1
-            const string numbers =
-                "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty";
-            var numbersSplit = numbers.Split(" ");
+            var numbersSplit = TextToIntTrigger.Split(" ");
 
             // If the word is a number, get its index in the array and return the index, else return 0 which is a program-wide despised number in conditional statements 
             return numbersSplit.Any(word.Contains) ? Array.IndexOf(numbersSplit, word) : 0;
