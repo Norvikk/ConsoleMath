@@ -25,10 +25,8 @@ public static class Responses
     public static void Supported()
     {
         Console.WriteLine("Operators supported: +-*/\n" +
-                          "Not supported: The number '0' (e.g. 0 + 1).\n" +
                           "Equations should be written with spaces and not 1+1 or oneplusone.\n" +
-                          "Symbols connected to words are also not supported like 'one plus one!!'\n" +
-                          "decimal numbers are not intended to be used therefore don't work\n\n" +
+                          "Symbols connected to words are also not supported like 'one plus one!!'\n\n" +
                           "The text variant of any number above 20 (twenty) is not supported, but can be easily implemented in the code.");
     }
 

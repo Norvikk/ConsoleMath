@@ -1,4 +1,5 @@
-﻿using org.mariuszgromada.math.mxparser; // MathParser.org-mXparser (from NuGet)
+﻿using System.Globalization;
+using org.mariuszgromada.math.mxparser; // MathParser.org-mXparser (from NuGet)
 
 namespace ConsoleMath;
 
@@ -53,14 +54,20 @@ public static class Arithmetic
         {
             _appList[i] = new Types.MathApplication
             {
-                Number = 0,
-                Operator = null
+                Number = string.Empty,
+                Operator = string.Empty
             };
         }
     }
 
+    private static void Playground()
+    {
+    }
+
     public static void Main()
     {
+        Playground();
+
         Responses.Introduction();
         Responses.CommandPalette();
         Responses.Instructions();
@@ -80,14 +87,13 @@ public static class Arithmetic
                     break;
 
                 case "":
-                    Console.WriteLine("NO INPUT");
+                    Console.WriteLine("No Input");
                     Main();
                     break;
 
                 default:
-
-                    var userOutput = Convert.ToString(Listen(listened!));
-                    if (userOutput == "-2,1474836E+09")
+                    var userOutput = Convert.ToString(Listen(listened!), CultureInfo.InvariantCulture);
+                    if (userOutput is "-2,1474836E+09" or "NaN")
                         userOutput =
                             $"({userOutput}: ERROR)\nHave you considered using the command: SUPPORTED as an input?";
 
@@ -104,7 +110,7 @@ public static class Arithmetic
 
 
     // Main processing function
-    private static float Listen(string listened)
+    private static double Listen(string listened)
     {
         var listenedSplit = listened.ToLower().Split(" ");
 
@@ -114,20 +120,24 @@ public static class Arithmetic
 
         foreach (var word in listenedSplit)
         {
-            if (IsIndirectInt(word) != 0) _appList![app].Number = IsIndirectInt(word);
+            var indirectInt = IsIndirectInt(word);
+            if (indirectInt != -404) _appList![app].Number = word;
 
 
-            else if (IsDirectInt(word) && _appList![app].Number == 0) _appList[app].Number = StringToInt(word);
+            else if (IsDirectInt(word) && _appList![app].Number == string.Empty)
+            {
+                _appList![app].Number = word;
+            }
 
 
             else
             {
                 var result = IsOperator(word);
-                if (result != "not") _appList![app].Operator = result;
+                if (result != string.Empty) _appList![app].Operator = result;
             }
 
             if ((word == listenedSplit[^1] && loop == listenedSplit.Length - 1) ||
-                (_appList![app].Number != 0 && !string.IsNullOrEmpty(_appList[app].Operator)))
+                (_appList![app].Number != string.Empty && !string.IsNullOrEmpty(_appList[app].Operator)))
             {
                 if (word == listenedSplit[^1] && loop == listenedSplit.Length - 1)
                 {
@@ -142,24 +152,22 @@ public static class Arithmetic
 
         return 0;
 
-        static bool IsDirectInt(string word) => int.TryParse(word, out _);
+        static bool IsDirectInt(string word) => int.TryParse(word, out _) || double.TryParse(word, out _);
 
         static int IsIndirectInt(string word)
         {
             var numbersSplit = TextToIntTrigger.Split(" ");
 
-            return numbersSplit.Any(word.Contains) ? Array.IndexOf(numbersSplit, word) : 0;
+            return numbersSplit.Any(word.Contains) ? Array.IndexOf(numbersSplit, word) : -404;
         }
 
-        static int StringToInt(string word) => Convert.ToInt32(word);
 
-        static int Calculate()
+        static double Calculate()
         {
-            var resultFormula = _appList!.Where(app => app.Number != 0)
-                .Aggregate("", (current, app) => current + $"{app.Number} {app.Operator} ");
+            var resultFormula = _appList!.Where(app => app.Number != string.Empty)
+                .Aggregate("", (current, app) => current + $"{app.Number?.Replace(",", ".")} {app.Operator} ");
             var e = new Expression(resultFormula);
-
-            return (int)Math.Round(e.calculate());
+            return e.calculate();
         }
 
         static string IsOperator(string word)
@@ -172,7 +180,7 @@ public static class Arithmetic
                 }
             }
 
-            return "not";
+            return string.Empty;
         }
     }
 }

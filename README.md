@@ -7,7 +7,7 @@ A over-engineered project suggestion by the Open AI ChatGPT when I asked for fun
 ## Features
 
 - Words to numbers
-- Words refering to operators
+- Decimal equations 
 - The 4 basic operators. (+/*-)
 - Not case sensitive
 - Ignores unrelated words
@@ -20,8 +20,7 @@ A over-engineered project suggestion by the Open AI ChatGPT when I asked for fun
 ![Preview](https://user-images.githubusercontent.com/105376497/210094825-d9afadd4-efc2-421a-ab29-ca44f18ebc82.gif)
 ## Screenshots
 ### Unsupported task screen 
-![image](https://user-images.githubusercontent.com/105376497/210096421-4ed9f9a8-59ee-4fe3-8ebc-213d43e0e246.png)
-
+![grafik](https://user-images.githubusercontent.com/105376497/210146979-1bf72ce4-6bb0-4da7-956c-ded255f7adf4.png)
 
 ## Installation
 

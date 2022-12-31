@@ -11,7 +11,7 @@ public static class Types
  
     public struct MathApplication
     {
-        public double? Number;
+        public string? Number;
         public string? Operator;
     }
 }
