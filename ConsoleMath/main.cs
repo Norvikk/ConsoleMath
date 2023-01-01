@@ -121,12 +121,12 @@ public static class Arithmetic
         foreach (var word in listenedSplit)
         {
             var indirectInt = IsIndirectInt(word);
-            if (indirectInt != -404) _appList![app].Number = word;
+            if (indirectInt != -404) _appList![app].Number = indirectInt.ToString();
 
 
             else if (IsDirectInt(word) && _appList![app].Number == string.Empty)
             {
-                _appList![app].Number = word;
+                _appList[app].Number = word;
             }
 
 
@@ -166,6 +166,8 @@ public static class Arithmetic
         {
             var resultFormula = _appList!.Where(app => app.Number != string.Empty)
                 .Aggregate("", (current, app) => current + $"{app.Number?.Replace(",", ".")} {app.Operator} ");
+            
+            Console.WriteLine(resultFormula);
             var e = new Expression(resultFormula);
             return e.calculate();
         }
