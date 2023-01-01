@@ -23,7 +23,7 @@ public static class Arithmetic
     private const int MathApplicationCount = 15;
 
 
-    private static void AssignArithmeticsSource()
+    public static void AssignArithmeticsSource()
     {
         _source = new Types.ArithmeticsSource[4];
 
@@ -66,6 +66,7 @@ public static class Arithmetic
 
     public static void Main()
     {
+        InitTest.TestFunctionality();
         Playground();
 
         Responses.Introduction();
@@ -110,7 +111,7 @@ public static class Arithmetic
 
 
     // Main processing function
-    private static double Listen(string listened)
+    public static double Listen(string listened)
     {
         var listenedSplit = listened.ToLower().Split(" ");
 
@@ -167,7 +168,6 @@ public static class Arithmetic
             var resultFormula = _appList!.Where(app => app.Number != string.Empty)
                 .Aggregate("", (current, app) => current + $"{app.Number?.Replace(",", ".")} {app.Operator} ");
             
-            Console.WriteLine(resultFormula);
             var e = new Expression(resultFormula);
             return e.calculate();
         }
