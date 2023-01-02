@@ -3,23 +3,21 @@ namespace ConsoleMath;
 public static class Responses
 {
     private static readonly Random Rdm = new();
+
     private static int GetRandomInt(int low, int max) => Rdm.Next(low, max);
 
     public static string ResultAffirmation()
     {
-        const string affirmations = "The result is -I guess it's -Resultant -Resulting -Outcome achieved: -Conclusion reached: -Answer obtained: -The outcome produced: ";
+        const string affirmations =
+            "The result is -I guess it's -Resultant -Resulting -Outcome achieved: -Conclusion reached: -Answer obtained: -The outcome produced: ";
         var splitAffirmations = affirmations.Split("-");
         return splitAffirmations[Rdm.Next(0, splitAffirmations.Length)];
-    }
-    public static void CommandPalette()
-    {
-        Console.WriteLine("Possible commands ->  supported, instructions");
     }
 
     public static void Introduction()
     {
         const string output = "<Norvik>     ConsoleMath";
-        Console.WriteLine($"{output}\n{GetSplitterLines(output, "-+")}");
+        Console.WriteLine($"{output}\n{GetSplitterLines(output, "-+")}\n");
     }
 
     public static void Supported()
@@ -32,8 +30,8 @@ public static class Responses
 
     public static void Instructions()
     {
-        var result = $"Sample input: Get {GetRandomInt(-54, 11)} minus {GetRandomInt(1, 9)}";
-        Console.WriteLine($"{result}\n{GetSplitterLines(result, "-")}\n");
+        var result = $"Sample input: What is {GetRandomInt(-54, 11)} plus {GetRandomInt(1, 9)} ?";
+        Console.WriteLine($"{GetSplitterLines(result, "-")}\n{result}\n{GetSplitterLines(result, "-")}\n");
     }
 
     // Custom function for getting a fancy underline with characters used in this example

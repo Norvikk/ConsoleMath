@@ -5,9 +5,6 @@ namespace ConsoleMath;
 
 public static class Arithmetic
 {
-    private static readonly Random Rdm = new();
-
-
     private const string AdditionTrigger = "add sum combine plus +";
     private const string SubtractionTrigger = "take subtract minus remove without -";
     private const string DivisionTrigger = "divided division divide /";
@@ -17,10 +14,11 @@ public static class Arithmetic
                                             " eleven twelve thirteen fourteen fifteen sixteen seventeen" +
                                             " eighteen nineteen twenty";
 
+    private const int MathApplicationCount = 15;
+    private static readonly Random Rdm = new();
+
     private static Types.ArithmeticsSource[]? _source;
     private static Types.MathApplication[]? _appList;
-
-    private const int MathApplicationCount = 15;
 
 
     public static void AssignArithmeticsSource()
@@ -70,19 +68,16 @@ public static class Arithmetic
         Playground();
 
         Responses.Introduction();
-        Responses.CommandPalette();
         Responses.Instructions();
         while (true)
         {
+            var oldAnswer = string.Empty;
+            var oldQuestion = string.Empty;
             AssignArithmeticsSource();
             Console.WriteLine("Listening...");
             var listened = Console.ReadLine();
             switch (listened?.ToLower())
             {
-                case "instructions":
-                    Responses.Instructions();
-                    break;
-
                 case "supported":
                     Responses.Supported();
                     break;
@@ -98,14 +93,16 @@ public static class Arithmetic
                         userOutput =
                             $"({userOutput}: ERROR)\nHave you considered using the command: SUPPORTED as an input?";
 
-
-                    Console.WriteLine($"{Responses.ResultAffirmation()}{userOutput}");
+                    oldAnswer = $"{Responses.ResultAffirmation()}{userOutput}";
+                    oldQuestion = listened;
+                    Console.WriteLine(oldAnswer);
                     break;
             }
 
             Console.WriteLine("Press <Enter> to clear and restart...");
             Console.ReadLine();
             Console.Clear();
+            Console.WriteLine($"User: {oldQuestion}\nEquation: {oldAnswer}\n");
         }
     }
 
@@ -167,7 +164,7 @@ public static class Arithmetic
         {
             var resultFormula = _appList!.Where(app => app.Number != string.Empty)
                 .Aggregate("", (current, app) => current + $"{app.Number?.Replace(",", ".")} {app.Operator} ");
-            
+
             var e = new Expression(resultFormula);
             return e.calculate();
         }
